@@ -1,0 +1,24 @@
+---
+title: Why our blog content lives in a separate repo
+excerpt: >-
+  Posts are MDX in their own public repository, edited through Keystatic and
+  read at build time. Here is why that split is worth the extra moving part.
+publishedAt: 2026-09-11
+draft: true
+featured: false
+authors:
+  - mehdi-soltany
+tags:
+  - engineering
+cover: {}
+seo: {}
+---
+The posts you are reading are not stored in the website repository. They live in their own public repo, and the site pulls them in when it builds.
+
+## What the split buys us
+
+Keeping content separate means the people who write posts never need access to the production website source. Editors get write access to one small repo, posts stay reviewable as plain files, and publishing never touches application code.
+
+<Callout variant="note">
+  Drafts live in the same repo as published posts. They are simply never built into the live site.
+</Callout>
