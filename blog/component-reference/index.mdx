@@ -1,0 +1,85 @@
+---
+title: Component reference
+excerpt: >-
+  Every content component the editor can insert, in one place, so we can see what
+  they look like and confirm they survive a round trip through Keystatic.
+publishedAt: 2026-09-08
+draft: true
+featured: false
+authors:
+  - mehdi-soltany
+tags:
+  - engineering
+cover:
+  image: https://cdn.jsdelivr.net/gh/pontivehq/blogs@main/images/blog/component-reference-cover.jpg
+  alt: The Pontive blog cover card
+seo: {}
+---
+This post exists to exercise every component at once. It is kept as a draft, so
+it never appears on the live site.
+
+## Callout
+
+<Callout variant="note" title="A note">
+  The default. Use it for an aside the reader should not skim past.
+</Callout>
+
+<Callout variant="tip">
+  A tip, with no title.
+</Callout>
+
+<Callout variant="warning" title="Careful">
+  Something that will bite if ignored.
+</Callout>
+
+## Figure
+
+<Figure
+  image="https://cdn.jsdelivr.net/gh/pontivehq/blogs@main/images/blog/component-reference-cover.jpg"
+  alt="The Pontive blog cover card"
+  caption="A figure, with a caption that plain Markdown cannot produce."
+  width="content"
+/>
+
+## Details
+
+<Details summary="Why not use a client-side disclosure?">
+  The native element needs no JavaScript, keeps the page a server component, and
+  browser find-in-page expands it to reveal a match.
+</Details>
+
+## Call to action
+
+<Cta
+  title="Building something that needs all of this?"
+  description="Auth, permissions, subscriptions and billing as one platform."
+  label="Join the waitlist"
+  href="/waitlist"
+/>
+
+## Embed
+
+An unrecognised URL degrades to a link rather than being framed:
+
+<Embed url="https://example.com/not-a-video" title="Not a video" />
+
+## Markdown that needs no component
+
+Tables, task lists and strikethrough all come from `remark-gfm`:
+
+| Feature | Source |
+| --- | --- |
+| Tables | remark-gfm |
+| Highlighting | Shiki |
+| Callouts | a component |
+
+- [x] Fenced code
+- [ ] ~~Raw HTML~~ (not allowed)
+
+```ts
+export const reader = createGitHubReader(config, {
+  repo: "pontivehq/blogs",
+});
+```
+
+And `inline code` inside a sentence.
