@@ -1,0 +1,29 @@
+name: Check image sizes
+
+# `fields.image` in Keystatic has no size validation, so nothing stops an editor
+# uploading a 6 MB camera JPEG. Every image committed here is permanent history,
+# so reject the oversized ones at the door.
+on:
+  pull_request:
+    paths: ["images/**"]
+  push:
+    branches: [main]
+    paths: ["images/**"]
+
+jobs:
+  size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Fail on images over 500 KB
+        run: |
+          max=512000
+          over=$(find images -type f -size +${max}c 2>/dev/null || true)
+          if [ -n "$over" ]; then
+            echo "::error::These images exceed 500 KB. Compress them (squoosh.app) and re-upload:"
+            echo "$over" | while read -r f; do
+              echo "::error file=$f::$(du -h "$f" | cut -f1) — $f"
+            done
+            exit 1
+          fi
+          echo "All images are within budget."
