@@ -77,3 +77,17 @@ tags/<slug>.yaml
 images/blog/            cover and in-body images
 images/authors/         portraits
 ```
+
+---
+
+## For developers
+
+The website (`revotech-group/pontive-website`) reads this repo at build time via
+Keystatic's GitHub reader — no token, because this repo is public.
+
+A push here does not produce a commit there, so
+`.github/workflows/rebuild-website.yml` calls a Vercel deploy hook instead. It
+needs two repository secrets, documented at the top of that file:
+`VERCEL_DEPLOY_HOOK_PRODUCTION` (required) and `VERCEL_DEPLOY_HOOK_STAGING`
+(optional). Until the production one is set, content pushes will fail the
+workflow — deliberately, because the site genuinely is not being rebuilt.

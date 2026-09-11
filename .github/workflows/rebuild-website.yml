@@ -1,0 +1,76 @@
+name: Rebuild website
+
+# Content lives here, but the site is built from revotech-group/pontive-website.
+# A commit in this repo produces no commit there, so Vercel would never notice —
+# this workflow pokes it with a deploy hook.
+#
+# SETUP (once): in the Vercel project, Settings → Git → Deploy Hooks, create a
+# hook for the production branch and one for the staging branch, then add their
+# URLs here as repository secrets:
+#
+#   VERCEL_DEPLOY_HOOK_PRODUCTION   (required)
+#   VERCEL_DEPLOY_HOOK_STAGING      (optional — omit until staging exists)
+#
+# Treat both URLs as secrets: anyone holding one can trigger a deploy.
+
+on:
+  push:
+    branches: [main]
+    # Only content changes need a rebuild. Editing the README or these workflows
+    # does not change a single page on the site.
+    paths:
+      - "blog/**"
+      - "authors/**"
+      - "tags/**"
+      - "images/**"
+  workflow_dispatch:
+
+# Nothing here reads or writes the repository; it only makes an outbound call.
+permissions: {}
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger production deploy
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK_PRODUCTION }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::error::VERCEL_DEPLOY_HOOK_PRODUCTION is not set, so the website was NOT rebuilt. See the setup note at the top of this workflow."
+            exit 1
+          fi
+
+          status=$(curl -sS -X POST "$HOOK" -o response.json -w '%{http_code}')
+          echo "Vercel responded $status"
+          cat response.json || true
+
+          if [ "$status" -ge 400 ]; then
+            echo "::error::Deploy hook returned $status — the website was not rebuilt."
+            exit 1
+          fi
+
+          echo "### Production rebuild triggered" >> "$GITHUB_STEP_SUMMARY"
+
+      # Staging is what makes drafts previewable: it runs with BLOG_SHOW_DRAFTS=1,
+      # so unpublished posts appear there and nowhere else. Skipped rather than
+      # failed when the secret is absent, so this repo works before staging exists.
+      - name: Trigger staging deploy
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK_STAGING }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::notice::VERCEL_DEPLOY_HOOK_STAGING is not set — skipping the staging rebuild. Drafts will not be previewable until it is configured."
+            exit 0
+          fi
+
+          status=$(curl -sS -X POST "$HOOK" -o response.json -w '%{http_code}')
+          echo "Vercel responded $status"
+          cat response.json || true
+
+          if [ "$status" -ge 400 ]; then
+            echo "::error::Staging deploy hook returned $status."
+            exit 1
+          fi
+
+          echo "### Staging rebuild triggered" >> "$GITHUB_STEP_SUMMARY"
