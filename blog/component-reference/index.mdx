@@ -11,7 +11,6 @@ authors:
 tags:
   - engineering
 cover:
-  image: /content-images/blog/component-reference/cover.jpg
   alt: The Pontive blog cover card
 seo: {}
 ---
@@ -34,12 +33,7 @@ as it appears on the site.
 
 ## Figure
 
-<Figure
-  image="/content-images/blog/component-reference/cover.jpg"
-  alt="The Pontive blog cover card"
-  caption="A figure, with a caption that plain Markdown cannot produce."
-  width="content"
-/>
+<Figure alt="The Pontive blog cover card" caption="A figure, with a caption that plain Markdown cannot produce." width="content" />
 
 ## Details
 
@@ -50,12 +44,7 @@ as it appears on the site.
 
 ## Call to action
 
-<Cta
-  title="Building something that needs all of this?"
-  description="Auth, permissions, subscriptions and billing as one platform."
-  label="Join the waitlist"
-  href="/waitlist"
-/>
+<Cta title="Building something that needs all of this?" description="Auth, permissions, subscriptions and billing as one platform." label="Join the waitlist" href="/waitlist" />
 
 ## Embed
 
@@ -67,14 +56,14 @@ An unrecognised URL degrades to a link rather than being framed:
 
 Tables, task lists and strikethrough all come from `remark-gfm`:
 
-| Feature | Source |
-| --- | --- |
-| Tables | remark-gfm |
-| Highlighting | Shiki |
-| Callouts | a component |
+| Feature      | Source      |
+| ------------ | ----------- |
+| Tables       | remark-gfm  |
+| Highlighting | Shiki       |
+| Callouts     | a component |
 
-- [x] Fenced code
-- [ ] ~~Raw HTML~~ (not allowed)
+* \[x] Fenced code
+* \[ ] ~~Raw HTML~~ (not allowed)
 
 ```ts
 export const reader = createGitHubReader(config, {
